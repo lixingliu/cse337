@@ -59,6 +59,8 @@ def isBalanced(s):
 # isBalanced("[{}][{}]")
 # isBalanced(("{({}{}[][[([{}]){}]])}"))
 # isBalanced("()())()")
+# isBalanced("{[]()}")
+
 def countValidStrings(s):
     valid_bracket_array = []
     invalid_bracket_array = []
@@ -78,7 +80,6 @@ def countValidStrings(s):
                     invalid_bracket_array.append(key_of_value)
                     del valid_bracket_array[valid_bracket_array.index(key_of_value)]
     print(len(invalid_bracket_array))
-    
 def countValidStrings_2(s):
 
     bracket_dictionary = {'{': '}', '[': ']', '(': ')'}   
@@ -147,7 +148,86 @@ def countValidStrings_3(s):
 # countValidStrings_3("()())()") #1
 # countValidStrings_3("({[(])})") # 2
 # countValidStrings_3("({[({{{])})") #5
-countValidStrings_3("({[({{{)])})") #3
+# countValidStrings_3("({[({{{)])})") #3
 
 # countValidStrings_3("{[[([}])]]") #2
 # countValidStrings_3("((({{]}])]}})))")
+
+
+
+
+
+class Node:
+    def __init__(self, label, left_child = None, right_child = None, left_child_seen = False, right_child_seen = False, level = 0):
+        self.label = label
+        self.left_child = left_child
+        self.right_child = right_child
+        self.level = level
+
+    def preOrderHelper(self, order = None):        
+        if order is None:
+            order = []
+        order.append(self.label)
+        if self.left_child:
+            self.left_child.preOrderHelper(order)
+        if self.right_child:
+            self.right_child.preOrderHelper(order)
+        return order
+        
+    def preOrder(self, order = None):
+        print(self.preOrderHelper(order))
+
+    def inOrderHelper(self, order = None):
+        if order is None:
+            order = []
+        if self.left_child:
+            self.left_child.inOrderHelper(order)
+        order.append(self.label)
+        if self.right_child:
+            self.right_child.inOrderHelper(order)
+        return order
+
+    def inOrder(self, order = None):
+        print(self.inOrderHelper(order))
+
+    def postOrderHelper(self, order = None):
+        if order is None:
+            order = []
+        if self.left_child:
+            self.left_child.postOrderHelper(order)
+        if self.right_child:
+            self.right_child.postOrderHelper(order)
+        order.append(self.label)
+        return order
+    
+    def postOrder(self, order = None):
+        print(self.postOrderHelper(order))
+
+    def getHeightHelper(self, value):
+        result = -1
+        if self.label == value:
+            return self.level
+        if self.left_child:
+            self.left_child.level = self.level + 1
+            result = self.left_child.getHeightHelper(value)
+        if self.right_child:
+            self.right_child.level = self.level + 1
+            result = self.right_child.getHeightHelper(value)
+        return result
+
+    def getHeight(self, value):
+        print(self.getHeightHelper(value))
+
+    def sumTree(self):
+        print(sumTreeHelper())
+# root = Node(2, Node(1, Node(6), Node(3)), Node(3, None, Node(9)))
+# root.preOrder()
+# root.inOrder()
+# root.postOrder()
+# root.getHeight(9)
+
+# print("\n")
+# root = Node(1, Node(2, Node(3)), Node(4,None,(Node(5, None, Node(6, None, Node(7))))))
+# root.preOrder()
+# root.inOrder()
+# root.postOrder()
