@@ -133,14 +133,21 @@ def countValidStrings_3(s):
                 invalid_bracket_array.append(ch)
                 continue
             if bracket_dictionary.get(valid_bracket_array[-1]) != ch:
-                invalid_bracket_array.append(ch)
+                if bracket_dictionary.get(valid_bracket_array[-1]) in invalid_bracket_array:
+                    invalid_bracket_array.append(valid_bracket_array.pop())
+                if bracket_dictionary.get(valid_bracket_array[-1]) == ch:
+                    valid_bracket_array.pop()
+                else:
+                    invalid_bracket_array.append(ch)
             else:
                 valid_bracket_array.pop()
     print(len(invalid_bracket_array))
  
 
-countValidStrings_3("()())()") #1
-countValidStrings_3("({[(])})") # 2
+# countValidStrings_3("()())()") #1
+# countValidStrings_3("({[(])})") # 2
 # countValidStrings_3("({[({{{])})") #5
+countValidStrings_3("({[({{{)])})") #3
+
 # countValidStrings_3("{[[([}])]]") #2
 # countValidStrings_3("((({{]}])]}})))")
