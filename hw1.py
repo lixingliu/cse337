@@ -58,6 +58,7 @@ def isBalanced(s):
 # isBalanced("{{[[(())]]}}")
 # isBalanced("[{}][{}]")
 # isBalanced(("{({}{}[][[([{}]){}]])}"))
+# isBalanced("()())()")
 def countValidStrings(s):
     valid_bracket_array = []
     invalid_bracket_array = []
@@ -120,8 +121,26 @@ def countValidStrings_2(s):
     # print(len(deleted_bracket_array))
     # print(count_1)
     print(min(count_1, len(deleted_bracket_array)))
-# countValidStrings_2("()())()") #1
-# countValidStrings_2("({[(])})") # 2
-# countValidStrings_2("({[({{{])})") #5
-# countValidStrings_2("{[[([}])]]") #2
-countValidStrings_2("((({{]}])]}})))")
+def countValidStrings_3(s):
+    valid_bracket_array = []
+    invalid_bracket_array = []
+    bracket_dictionary = {'{': '}', '[': ']', '(': ')'}   
+    for ch in s:
+        if ch in bracket_dictionary.keys():
+            valid_bracket_array.append(ch)
+        else:
+            if not valid_bracket_array:
+                invalid_bracket_array.append(ch)
+                continue
+            if bracket_dictionary.get(valid_bracket_array[-1]) != ch:
+                invalid_bracket_array.append(ch)
+            else:
+                valid_bracket_array.pop()
+    print(len(invalid_bracket_array))
+ 
+
+countValidStrings_3("()())()") #1
+countValidStrings_3("({[(])})") # 2
+# countValidStrings_3("({[({{{])})") #5
+# countValidStrings_3("{[[([}])]]") #2
+# countValidStrings_3("((({{]}])]}})))")
