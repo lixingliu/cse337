@@ -218,16 +218,32 @@ class Node:
     def getHeight(self, value):
         print(self.getHeightHelper(value))
 
-    def sumTree(self):
-        print(sumTreeHelper())
-# root = Node(2, Node(1, Node(6), Node(3)), Node(3, None, Node(9)))
+    def sumTreeHelper(self):
+        print(self.label)
+        if self.label is None:
+            return 0
+        
+
+    def sumTree(self, order = None):
+        # print(self.sumTreeHelper())
+        if self.label is None:
+            return 0
+        
+        result = self.inOrderHelper(order)
+        print(sum(result))
+        return sum(result)
+
+root = Node(2, Node(1, Node(6), Node(3)), Node(3, None, Node(9)))
 # root.preOrder()
 # root.inOrder()
 # root.postOrder()
 # root.getHeight(9)
+root.sumTree()
+
 
 # print("\n")
-# root = Node(1, Node(2, Node(3)), Node(4,None,(Node(5, None, Node(6, None, Node(7))))))
+root = Node(1, Node(2, Node(3)), Node(4,None,(Node(5, None, Node(6, None, Node(7))))))
 # root.preOrder()
 # root.inOrder()
 # root.postOrder()
+root.sumTree()
