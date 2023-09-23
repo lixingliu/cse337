@@ -61,97 +61,121 @@ def isBalanced(s):
 # isBalanced("()())()")
 # isBalanced("{[]()}")
 
-def countValidStrings(s):
-    valid_bracket_array = []
-    invalid_bracket_array = []
-    bracket_dictionary = {'{': '}', '[': ']', '(': ')'}   
-    for ch in s:
-        if ch in bracket_dictionary.keys():
-            valid_bracket_array.append(ch)
-        else:
-            if valid_bracket_array and bracket_dictionary.get(valid_bracket_array[-1]) == ch:
-                valid_bracket_array.pop()
-            else:
-                list_bracket_dictionary_keys = list(bracket_dictionary.keys())
-                list_bracket_dictionary_values = list(bracket_dictionary.values())
-                invalid_bracket_array.append(ch)
-                key_of_value = list_bracket_dictionary_keys[list_bracket_dictionary_values.index(ch)]
-                if key_of_value in valid_bracket_array:
-                    invalid_bracket_array.append(key_of_value)
-                    del valid_bracket_array[valid_bracket_array.index(key_of_value)]
-    print(len(invalid_bracket_array))
-def countValidStrings_2(s):
+# def countValidStrings(s):
+#     valid_bracket_array = []
+#     invalid_bracket_array = []
+#     bracket_dictionary = {'{': '}', '[': ']', '(': ')'}   
+#     for ch in s:
+#         if ch in bracket_dictionary.keys():
+#             valid_bracket_array.append(ch)
+#         else:
+#             if valid_bracket_array and bracket_dictionary.get(valid_bracket_array[-1]) == ch:
+#                 valid_bracket_array.pop()
+#             else:
+#                 list_bracket_dictionary_keys = list(bracket_dictionary.keys())
+#                 list_bracket_dictionary_values = list(bracket_dictionary.values())
+#                 invalid_bracket_array.append(ch)
+#                 key_of_value = list_bracket_dictionary_keys[list_bracket_dictionary_values.index(ch)]
+#                 if key_of_value in valid_bracket_array:
+#                     invalid_bracket_array.append(key_of_value)
+#                     del valid_bracket_array[valid_bracket_array.index(key_of_value)]
+#     print(len(invalid_bracket_array))
+# def countValidStrings_2(s):
 
-    bracket_dictionary = {'{': '}', '[': ']', '(': ')'}   
-    list_bracket_dictionary_values = list(bracket_dictionary.values())
-    list_bracket_dictionary_keys = list(bracket_dictionary.keys())
-    valid_bracket_array = []
-    deleted_bracket_array = []
-    count_1 = 0
-    for ch in s:
-        if ch in bracket_dictionary.keys():
-            valid_bracket_array.append(ch)
-        else:
-            key_of_value = list_bracket_dictionary_keys[list_bracket_dictionary_values.index(ch)]
-            if valid_bracket_array and bracket_dictionary.get(valid_bracket_array[-1]) == ch:
-                valid_bracket_array.pop()
-                count_1 += 2
-                continue
-            if not valid_bracket_array or key_of_value in deleted_bracket_array:
-                deleted_bracket_array.append(ch)
-                continue
-            if not key_of_value in valid_bracket_array:
-                deleted_bracket_array.append(ch)
-                continue
-            i = -1
-            while valid_bracket_array[-1] != key_of_value:
-                deleted_bracket_array.append(valid_bracket_array.pop())
-                # i -= 1
-            # deleted_bracket_array.append(valid_bracket_array[i])
-            # del valid_bracket_array[i] 
-            # if bracket_dictionary.get(valid_bracket_array[-1]) in deleted_bracket_array:
-            #     deleted_bracket_array.append(valid_bracket_array.pop())
-            # if valid_bracket_array[-1] != key_of_value:
-            #     deleted_bracket_array.append(ch)
-            #     continue
-            if valid_bracket_array[-1] == key_of_value:
-                valid_bracket_array.pop()
-                count_1 += 2
-    if valid_bracket_array:
-        deleted_bracket_array += valid_bracket_array
-    # print(len(deleted_bracket_array))
-    # print(count_1)
-    print(min(count_1, len(deleted_bracket_array)))
-def countValidStrings_3(s):
-    valid_bracket_array = []
-    invalid_bracket_array = []
-    bracket_dictionary = {'{': '}', '[': ']', '(': ')'}   
-    for ch in s:
-        if ch in bracket_dictionary.keys():
-            valid_bracket_array.append(ch)
-        else:
-            if not valid_bracket_array:
-                invalid_bracket_array.append(ch)
-                continue
-            if bracket_dictionary.get(valid_bracket_array[-1]) != ch:
-                if bracket_dictionary.get(valid_bracket_array[-1]) in invalid_bracket_array:
-                    invalid_bracket_array.append(valid_bracket_array.pop())
-                if bracket_dictionary.get(valid_bracket_array[-1]) == ch:
-                    valid_bracket_array.pop()
-                else:
-                    invalid_bracket_array.append(ch)
-            else:
-                valid_bracket_array.pop()
-    print(len(invalid_bracket_array))
+#     bracket_dictionary = {'{': '}', '[': ']', '(': ')'}   
+#     list_bracket_dictionary_values = list(bracket_dictionary.values())
+#     list_bracket_dictionary_keys = list(bracket_dictionary.keys())
+#     valid_bracket_array = []
+#     deleted_bracket_array = []
+#     count_1 = 0
+#     for ch in s:
+#         if ch in bracket_dictionary.keys():
+#             valid_bracket_array.append(ch)
+#         else:
+#             key_of_value = list_bracket_dictionary_keys[list_bracket_dictionary_values.index(ch)]
+#             if valid_bracket_array and bracket_dictionary.get(valid_bracket_array[-1]) == ch:
+#                 valid_bracket_array.pop()
+#                 count_1 += 2
+#                 continue
+#             if not valid_bracket_array or key_of_value in deleted_bracket_array:
+#                 deleted_bracket_array.append(ch)
+#                 continue
+#             if not key_of_value in valid_bracket_array:
+#                 deleted_bracket_array.append(ch)
+#                 continue
+#             i = -1
+#             while valid_bracket_array[-1] != key_of_value:
+#                 deleted_bracket_array.append(valid_bracket_array.pop())
+#                 # i -= 1
+#             # deleted_bracket_array.append(valid_bracket_array[i])
+#             # del valid_bracket_array[i] 
+#             # if bracket_dictionary.get(valid_bracket_array[-1]) in deleted_bracket_array:
+#             #     deleted_bracket_array.append(valid_bracket_array.pop())
+#             # if valid_bracket_array[-1] != key_of_value:
+#             #     deleted_bracket_array.append(ch)
+#             #     continue
+#             if valid_bracket_array[-1] == key_of_value:
+#                 valid_bracket_array.pop()
+#                 count_1 += 2
+#     if valid_bracket_array:
+#         deleted_bracket_array += valid_bracket_array
+#     # print(len(deleted_bracket_array))
+#     # print(count_1)
+#     print(min(count_1, len(deleted_bracket_array)))
+# def countValidStrings_3(s):
+#     valid_bracket_array = []
+#     invalid_bracket_array = []
+#     bracket_dictionary = {'{': '}', '[': ']', '(': ')'}   
+#     for ch in s:
+#         if ch in bracket_dictionary.keys():
+#             valid_bracket_array.append(ch)
+#         else:
+#             if not valid_bracket_array:
+#                 invalid_bracket_array.append(ch)
+#                 continue
+#             if bracket_dictionary.get(valid_bracket_array[-1]) != ch:
+#                 if bracket_dictionary.get(valid_bracket_array[-1]) in invalid_bracket_array:
+#                     invalid_bracket_array.append(valid_bracket_array.pop())
+#                 if bracket_dictionary.get(valid_bracket_array[-1]) == ch:
+#                     valid_bracket_array.pop()
+#                 else:
+#                     invalid_bracket_array.append(ch)
+#             else:
+#                 valid_bracket_array.pop()
+#     print(len(invalid_bracket_array))
  
 
-# countValidStrings_3("()())()") #1
-# countValidStrings_3("({[(])})") # 2
-# countValidStrings_3("({[({{{])})") #5
-# countValidStrings_3("({[({{{)])})") #3
-
-# countValidStrings_3("{[[([}])]]") #2
+# countValidStrings_3("()())()") 
+# countValidStrings_3("({[(])})") 
+# countValidStrings_3("({[({{{])})") 
+# countValidStrings_3("({[({{{)])})") 
+# countValidStrings_3("{[[([}])]]") 
 # countValidStrings_3("((({{]}])]}})))")
+
+def countValidStrings(s):
+    open_parenthesis = '('
+    close_parenthesis = ')'
+    open_dictionary = {}
+    close_dictionary = {}
+    sent_array = list(s)
+    for x, ch in enumerate(sent_array):
+        if ch == open_parenthesis:
+            open_dictionary[x] = ch
+        else:
+            if open_dictionary:
+                open_dictionary.popitem()
+            else:
+                close_dictionary[x] = ch
+
+    invalid_dictionary = {**open_dictionary, **close_dictionary}
+    print(invalid_dictionary)
+    return
+
+# countValidStrings("())()))()")
+
+# countValidStrings("()(()")
+# countValidStrings("())()")
+countValidStrings("())(()()")
 
 
 
@@ -233,17 +257,17 @@ class Node:
         print(sum(result))
         return sum(result)
 
-root = Node(2, Node(1, Node(6), Node(3)), Node(3, None, Node(9)))
+# root = Node(2, Node(1, Node(6), Node(3)), Node(3, None, Node(9)))
 # root.preOrder()
 # root.inOrder()
 # root.postOrder()
 # root.getHeight(9)
-root.sumTree()
+# root.sumTree()
 
 
 # print("\n")
-root = Node(1, Node(2, Node(3)), Node(4,None,(Node(5, None, Node(6, None, Node(7))))))
+# root = Node(1, Node(2, Node(3)), Node(4,None,(Node(5, None, Node(6, None, Node(7))))))
 # root.preOrder()
 # root.inOrder()
 # root.postOrder()
-root.sumTree()
+# root.sumTree()
