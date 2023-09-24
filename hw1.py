@@ -9,7 +9,6 @@ def isValid(s):
             character_dictionary[ch] = character_dictionary.get(ch) + 1 
         else:
             character_dictionary[ch] = 1
-    # letter_count = list(character_dictionary.values())[0]
     value_dictionary = {}
     for ch in character_dictionary.values():
         if value_dictionary.get(ch) is None:
@@ -36,6 +35,7 @@ def isValid(s):
 # isValid("aabbcd")
 # isValid("aabbcdddeefghi")
 # isValid("pabcdefghhgfedcba")
+# isValid('abcdefghhgfedecba')
 # isValid("aabbcce")
 # isValid("ggacc")
 
@@ -45,20 +45,26 @@ def isBalanced(s):
     bracket_dictionary = {'{': '}', '[': ']', '(': ')'}
     if (len(s)) % 2 != 0 or s[0] not in bracket_dictionary.keys():
         print("NO")
-        return
+        return("NO")
     else:
         for ch in s:
             if ch in bracket_dictionary.keys():
                 bracket_array.append(ch)
             else:
+                if not bracket_array:
+                    print("NO")
+                    return("NO")
                 if bracket_dictionary.get(bracket_array[-1]) == ch:
                     bracket_array.pop()
         if not bracket_array:
             print("YES")
+            return("YES")
         else:
             print("NO")
+            return("NO")
 
 # print("is balanced test cases")
+# isBalanced('()))((()()')
 # isBalanced("(){[([()][])]}")
 # isBalanced("{[()]}")
 # isBalanced("{[(])}")
@@ -108,6 +114,7 @@ def countValidStrings(s):
                 visit.add(temp)
     print(len(valid_s))
     return(len(valid_s))
+
 # countValidStrings("()())((()()")
 # countValidStrings("()())()")
 # countValidStrings("(((((((())())(())((()")
