@@ -9,7 +9,6 @@ def isValid(s):
             character_dictionary[ch] = character_dictionary.get(ch) + 1 
         else:
             character_dictionary[ch] = 1
-    # letter_count = list(character_dictionary.values())[0]
     value_dictionary = {}
     for ch in character_dictionary.values():
         if value_dictionary.get(ch) is None:
@@ -36,6 +35,7 @@ def isValid(s):
 # isValid("aabbcd")
 # isValid("aabbcdddeefghi")
 # isValid("pabcdefghhgfedcba")
+# isValid('abcdefghhgfedecba')
 # isValid("aabbcce")
 # isValid("ggacc")
 
@@ -45,20 +45,26 @@ def isBalanced(s):
     bracket_dictionary = {'{': '}', '[': ']', '(': ')'}
     if (len(s)) % 2 != 0 or s[0] not in bracket_dictionary.keys():
         print("NO")
-        return
+        return("NO")
     else:
         for ch in s:
             if ch in bracket_dictionary.keys():
                 bracket_array.append(ch)
             else:
+                if not bracket_array:
+                    print("NO")
+                    return("NO")
                 if bracket_dictionary.get(bracket_array[-1]) == ch:
                     bracket_array.pop()
         if not bracket_array:
             print("YES")
+            return("YES")
         else:
             print("NO")
+            return("NO")
 
 # print("is balanced test cases")
+# isBalanced('()))((()()')
 # isBalanced("(){[([()][])]}")
 # isBalanced("{[()]}")
 # isBalanced("{[(])}")
@@ -68,32 +74,49 @@ def isBalanced(s):
 # isBalanced("()())()")
 # isBalanced("{[]()}")
 
-def countValidStrings(s):
-    open_parenthesis = "("
-    close_parenthesis = ")"
-    array_of_s = list(s)
-    open_dict = {}
-    close_dict = {}
-    for x, ch in enumerate(array_of_s):
-        if ch is open_parenthesis:
-            open_dict[x] = ch
+def check(str):
+    stack = []
+    for ch in str:
+        if ch == '(':
+            stack.append(ch)
         else:
-            if open_parenthesis in open_dict.values():
-                open_dict.popitem()
-            else:
-                close_dict[x] = ch
-    invalid_dict = {**open_dict, **close_dict}
-    print(invalid_dict)
-    # for close_index in close_dict.keys():
-    #     print(close_index)
-    #     for open_index in open_dict.keys():
-    #         print(open_index)
-    i = 0
-    while array_of_s[i] == close_parenthesis and i < close_dict
-    pass
+            if not stack:
+                 return False
+            stack.pop()
+    if stack:
+        return False
+    return True
+	
+def countValidStrings(s):
+    if len(s) == 0: 
+        return
+    visit = set()
+    q = []
+    temp = 0
+    level = 0
+    valid_s = []
+    q.append(s)
+    visit.add(s)
+    while(len(q)):
+        s = q[0]
+        q.pop(0)
+        if (check(s)):
+            valid_s.append(s)
+            level = True
+        if level:
+            continue
+        for i in range(len(s)):
+            if not (s[i] == ')' or s[i] == '('):
+                continue
+            temp = s[0:i] + s[i + 1:]
+            if temp not in visit:
+                q.append(temp)
+                visit.add(temp)
+    print(len(valid_s))
+    return(len(valid_s))
 
-# countValidStrings("()())()") #(())() # ()()()
-countValidStrings("()())((()()") #(())(()) # ()()()() # (())()()
+# countValidStrings("()())((()()")
+# countValidStrings("()())()")
 # countValidStrings("(((((((())())(())((()")
 
 class Node:
