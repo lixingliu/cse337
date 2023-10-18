@@ -3,39 +3,42 @@ class Array
     alias original_map map
     def [](index)
         if (index < self.length() and index >= (0 - self.length()))
-            original_index(index)
+            return self.original_index(index)
         else
             return '\0'
         end
     end
 
-    def map(range = nil)
-        print(self)
-        puts()
+    def map(range = nil, &block)
         if range == nil
-            self.original_map(){yield(self)}
+            return self.original_map(&block)
+        else
+            result = []
+            for i in range do
+                if self[i] != '\0'
+                    result.push(yield self[i])
+                end
+            end
+            return result
         end
     end
 end
   
-b = ["cat","bat","mat","sat"]
-# puts(b[0]) #cat
-# puts(b[1]) #bat
-# puts(b[2]) #mat
-# puts(b[3]) #sat
-# puts(b[-1]) #sat
-# puts(b[-2]) #mat
-# puts(b[-3]) #bat
-# puts(b[-4]) #cat
-# puts()
+# a = [1,2,34,5]
+# b = ["cat","bat","mat","sat"]
 # puts(b[-10], b[-9], b[-8], b[-7], b[-6], b[-5], b[-4], b[-3], b[-2], b[-1], b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8], b[9], b[10])
-a = [1,2,34,5]
-# puts(a[2])
-# puts(a[-2])
-# puts(a[5])
-# puts(a[-6])
-
-print a.map{|x| x.to_f}
 # print b.map(-10..10) { |x| x[0].upcase + x[1,x.length] }, "\n"
-  
-  
+# print b.map(2..4) { |x| x[0].upcase + x[1,x.length] }, "\n"
+# print b.map { |x| x[0].upcase + x[1,x.length] }, "\n"
+# print b.map(2..10) { |x| x[0].upcase + x[1,x.length] }, "\n"
+# puts a[1]
+# puts a[10]
+# print a.map(4..2) { |i| i.to_f}, "\n"
+# print a.map(2..4) { |i| i.to_f}, "\n"
+# print a.map { |i| i.to_f}, "\n"
+# puts b[-1]
+# puts b[5]
+# print b.map(2..10) { |x| x[0].upcase + x[1,x.length] }, "\n"
+# print b.map(2..4) { |x| x[0].upcase + x[1,x.length] }, "\n"
+# print b.map(-3..-1) { |x| x[0].upcase + x[1,x.length] }, "\n"
+# print b.map { |x| x[0].upcase + x[1,x.length] }, "\n"
