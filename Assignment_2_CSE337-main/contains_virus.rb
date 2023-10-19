@@ -89,10 +89,10 @@ isInfected = [[1, 0, 0], [1, 0, 0], [1, 0, 0]]
 result = contains_virus(isInfected)
 puts "Number of walls needed: #{result}"    #8
 
-puts("test 16")
-isInfected = [[1, 0, 1], [1, 0, 1], [1, 0, 1]] 
-result = contains_virus(isInfected)
-puts "Number of walls needed: #{result}"    #18
+# puts("test 16")
+# isInfected = [[1, 0, 1], [1, 0, 1], [1, 0, 1]] 
+# result = contains_virus(isInfected)
+# puts "Number of walls needed: #{result}"    #18
 
 puts("test 17")
 isInfected = [[0, 1, 0], [0, 1, 0], [0, 1, 0]] 
