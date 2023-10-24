@@ -1,81 +1,143 @@
 #!/usr/bin/env ruby
 # args = ARGF.argv
-$COUNT_OPTION = false
-$MATCH_OPTION = false
 
-def option_helper_function(args)
-    if args[0] == '-c'
-        count_option = true
-        args.shift  #pop the count option
-    end
-    if args[0] == '-m'
-        match_option = true
-        args.shift  #pop the match option
-    end
-    if count_option && match_option
-        print("cannot have both -c and -m")
-        return
+$P_OPTION = false
+$W_OPTION = false
+$C_OPTION = false
+$M_OPTION = false
+$PATTERN = ''
+def initial_check(args)
+    valid_options = ['-w', '-p', '-v', '-c', '-m']
+
+    if args.empty?
+        return "Missing required arguments"
     end
 
+    if !args[0].include?(".txt")
+        return "Missing required arguments"
+    end
+
+    if args.any? { |arg| arg.start_with?('-') and !valid_options.include?(arg) }
+        return "Invalid option"
+    end
+
+    return nil
 end
 
-
-args = ARGV
-if args.length() <= 1
-    print("Missing required arguments")
-else
-    filename = args[0]
-    args.shift
-    valid_start_options = ['-w', '-p', '-v']
-    if valid_start_options.include? args[0]
-        puts('valid')
-    else
-        puts("wtf am i looking at")
-        return
+def rgrep()
+    args = ARGV
+    option_counter = 0
+    initial_result = initial_check(args) 
+    if initial_result != nil
+        return initial_result
     end
-    while !args.empty?
+    filename = args[0]
+    args.shift()
+    input_options = []
+    while !args.empty? and option_counter <= 2
         case args[0]
-            when '-w' #the next arg should be a pattern
-                args.shift #pop -w
-                option_helper_function(args) #check if the next arg is a -c or -m and set the global variables
-                pattern = args[0]   #next word should be the pattern
-                args.shift #pop the pattern
-                if !$MATCH_OPTION and !$COUNT_OPTION
-                    result = []
-                    IO.foreach(filename) {|line| result.push(line[..-2]) if line.split().include? pattern }
-                    print result
-                elsif $COUNT_OPTION
-                    count = 0
-                    IO.foreach(filename) {|line| count = count + 1 if line.split().include? pattern }
-                    print count
-                elsif $MATCH_OPTION
-                    result = []
-                    IO.foreach(filename) {|line| result.push(pattern) if line.split().include? pattern }
-                    puts result
-
+            when '-w'
+                if $W_OPTION
+                    return "Invalid combination of options"
                 end
+                option_counter = option_counter + 1
+                $W_OPTION = true
+                input_options.append(args[0])
+                args.shift()
             when '-p'
-                args.shift #pop -w
-                count_option = false
-                match_option = false
-                if args[0] == '-c'
-                    count_option = true
-                    args.shift  #pop the count option
+                if $P_OPTION
+                    return "Invalid combination of options"
                 end
-                if args[0] == '-m'
-                    match_option = true
-                    args.shift  #pop the match option
+                option_counter = option_counter + 1
+                $P_OPTION = true
+                input_options.append(args[0])
+                args.shift()
+            when '-v'
+                option_counter = option_counter + 1
+                print('v')
+                args.shift()
+            when '-c'
+                option_counter = option_counter + 1
+                $C_OPTION = true
+                input_options.append(args[0])
+                args.shift()
+            when '-m'
+                option_counter = option_counter + 1
+                $M_OPTION = true
+                input_options.append(args[0])
+                args.shift()
+            else
+#need to deal with -w -p                    
+                if input_options.include?('-w') or input_options.include?('-p')
+                    $PATTERN = args[0]
+                    args.shift()
+                    break
+                else
+                    return "Invalid combination of options"
                 end
-                if count_option && match_option
-                    print("cannot have both -c and -m")
-                    return
-                end
-                pattern = args[0]
-                args.shift #pop the pattern
-                if !match_option and !count_option
-                    print(pattern)
-                end
+                args.shift()
+
         end
     end
+
+    if !args.empty?
+        return "Invalid combination of options"
+    end
+    print(input_options)
+    puts
+    #confused about the default thing
+    # if args.none? { |arg| arg.start_with?('-')}
+    #     P_OPTION = true
+    # end
+
+    #lets start with reading -w
+    # if we read -w, next one can be a -c or -m or a pattern
+    # if we read a -c next one has to be a -c or a -p or a -v
+    # -w pattern
+    # -w -c pattern
+    # -c -w pattern
+    if $P_OPTION and $M_OPTION
+        result = []
+        IO.foreach(filename) {|line| result.push(line.match(/#{$PATTERN}/)) }
+        # puts result
+        return result
+    end
+    if $P_OPTION and $C_OPTION
+        count = 0
+        IO.foreach(filename) {|line| count = count + 1 if line.match(/#{$PATTERN}/) }
+        # print count
+        return count
+    end
+    if $P_OPTION
+        result = []
+        IO.foreach(filename) {|line| result.push(line) if line.match(/#{$PATTERN}/)}
+        return result
+    end
+    if $W_OPTION and $M_OPTION
+        result = []
+        IO.foreach(filename) {|line| result.push($PATTERN) if line.split().include? $PATTERN }
+        # puts result
+        return result
+    end
+    if $W_OPTION and $C_OPTION
+        count = 0
+        IO.foreach(filename) {|line| count = count + 1 if line.split().include? $PATTERN }
+        # print count
+        return count
+    end
+    if $W_OPTION
+        result = []
+        IO.foreach(filename) {|line| result.push(line[..-2]) if line.split().include? $PATTERN }
+        # print result
+        return result 
+    end  
+
+
+
+    # need to check for missing pattern 
+    # need to check for invalid combination of options
+
+
 end
 
+puts(rgrep())
