@@ -14,10 +14,10 @@ def contains_virus(grid)
     end
     return(wall_count)
 end
-# puts("test 1")
-# isInfected = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]] 
-# result = contains_virus(isInfected)
-# puts "Number of walls needed: #{result}"    #16
+puts("test 1")
+isInfected = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]] 
+result = contains_virus(isInfected)
+puts "Number of walls needed: #{result}"    #16
 
 # puts("test 2")
 # isInfected = [[0,1,0,0],[1,1,1,0],[0,1,0,0],[1,1,0,0]] 
