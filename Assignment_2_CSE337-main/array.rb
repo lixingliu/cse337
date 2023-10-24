@@ -2,9 +2,18 @@ class Array
     alias original_index [] #use alias to represent the original []
     alias original_map map  #use alias to represent the original map
 
-    def [](index)   #override the original []
+    def [](index = nil, index2 = nil)   #override the original []
+        if index == nil and index2 == nil   #if there are no indexes
+            return "wrong number of arguments (given 0, expected 1..2)"
+        end
+        if index != nil and index2 != nil   #if there are 2 indexes
+            return self.original_index(index, index2)   #perform the original [] with 2 index
+        end
+        if index.is_a?(Range)   #if the input is a range
+            return self.original_index(index)
+        end
         if (index < self.length() and index >= (0 - self.length())) #if the index is greater than the negative range and less than the max index
-            return self.original_index(index)   #perform the original []
+            return self.original_index(index)   #perform the original [] with 1 index
         else
             return '\0' # if the index is invalid, then rethrn \0
         end
@@ -27,20 +36,24 @@ end
   
 a = [1,2,34,5]
 b = ["cat","bat","mat","sat"]
-# puts(b[-10], b[-9], b[-8], b[-7], b[-6], b[-5], b[-4], b[-3], b[-2], b[-1], b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8], b[9], b[10])
-# print b.map(-10..10) { |x| x[0].upcase + x[1,x.length] }, "\n"
-# print b.map(2..4) { |x| x[0].upcase + x[1,x.length] }, "\n"
+puts b[]
+puts b[1]
+puts b[0,4]
+puts b[0..4]
+puts(b[-10], b[-9], b[-8], b[-7], b[-6], b[-5], b[-4], b[-3], b[-2], b[-1], b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8], b[9], b[10])
+print b.map(-10..10) { |x| x[0].upcase + x[1,x.length] }, "\n"
+print b.map(2..4) { |x| x[0].upcase + x[1,x.length] }, "\n"
 print b.map { |x| x[0].upcase + x[1,x.length] }, "\n"
 print b.map(2..10) { |x| x[0].upcase + x[1,x.length] }, "\n"
-# puts a[1]
-# puts a[10]
-# print a.map(4..2) { |i| i.to_f}, "\n"
-# print a.map(2..4) { |i| i.to_f}, "\n"
-# print a.map(1..-3) {|i| i.to_f}, "\n"
-# print a.map { |i| i.to_f}, "\n"
-# puts b[-1]
-# puts b[5]
-# print b.map(2..10) { |x| x[0].upcase + x[1,x.length] }, "\n"
-# print b.map(2..4) { |x| x[0].upcase + x[1,x.length] }, "\n"
-# print b.map(-3..-1) { |x| x[0].upcase + x[1,x.length] }, "\n"
-# print b.map { |x| x[0].upcase + x[1,x.length] }, "\n"
+puts a[1]
+puts a[10]
+print a.map(4..2) { |i| i.to_f}, "\n"
+print a.map(2..4) { |i| i.to_f}, "\n"
+print a.map(1..-3) {|i| i.to_f}, "\n"
+print a.map { |i| i.to_f}, "\n"
+puts b[-1]
+puts b[5]
+print b.map(2..10) { |x| x[0].upcase + x[1,x.length] }, "\n"
+print b.map(2..4) { |x| x[0].upcase + x[1,x.length] }, "\n"
+print b.map(-3..-1) { |x| x[0].upcase + x[1,x.length] }, "\n"
+print b.map { |x| x[0].upcase + x[1,x.length] }, "\n"
