@@ -94,10 +94,9 @@ def rgrep()
         return "Invalid combination of options"
     end
 
-    #confused about the default thing
-    # if args.none? { |arg| arg.start_with?('-')}
-    #     P_OPTION = true
-    # end
+    if $PATTERN == ""
+        return 'missing required arguments'
+    end
 
     if $V_OPTION
         file = []
@@ -116,8 +115,8 @@ def rgrep()
 
     if $P_OPTION
         result = []
-        IO.foreach(filename) {|line| result.push(line) if line.match(/#{$PATTERN}/)}
-        # puts result
+        regexp = Regexp.new($PATTERN)
+        IO.foreach(filename) {|line| result.push(line) if line.match(regexp)}
         if $C_OPTION
             return result.length()
         end
