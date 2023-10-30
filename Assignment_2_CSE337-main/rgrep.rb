@@ -6,7 +6,7 @@ $W_OPTION = false
 $C_OPTION = false
 $M_OPTION = false
 $V_OPTION = false
-$PATTERN = ''
+$PATTERN = nil
 
 def initial_check(args)
     valid_options = ['-w', '-p', '-v', '-c', '-m']
@@ -89,12 +89,10 @@ def rgrep()
 
         end
     end
-
     if !args.empty?
         return "Invalid combination of options"
     end
-
-    if $PATTERN == ""
+    if $PATTERN == nil
         return 'missing required arguments'
     end
 
