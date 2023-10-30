@@ -31,6 +31,7 @@ def rgrep()
     option_counter = 0
     initial_result = initial_check(args) 
     if initial_result != nil
+        puts initial_result
         return initial_result
     end
     filename = args[0]
@@ -83,6 +84,7 @@ def rgrep()
                     args.shift()
                     break
                 else
+                    puts "Invalid combination of options"
                     return "Invalid combination of options"
                 end
                 args.shift()
@@ -90,9 +92,11 @@ def rgrep()
         end
     end
     if !args.empty?
+        puts "Invalid combination of options"
         return "Invalid combination of options"
     end
     if $PATTERN == nil
+        puts 'missing required arguments'
         return 'missing required arguments'
     end
 
@@ -102,12 +106,14 @@ def rgrep()
         IO.foreach(filename) {|line| file.push(line)}
         IO.foreach(filename) {|line| result.push(line) if line.match(/#{$PATTERN}/)}
         if $C_OPTION
+            puts (file - result).length()
             return (file - result).length()
         end
         if $M_OPTION
+            puts "Invalid combination of options" 
             return "Invalid combination of options" 
         end
-        # puts file - result
+        puts file - result
         return file - result
     end
 
@@ -116,11 +122,13 @@ def rgrep()
         regexp = Regexp.new($PATTERN)
         IO.foreach(filename) {|line| result.push(line) if line.match(regexp)}
         if $C_OPTION
+            puts result.length()
             return result.length()
         end
         if $M_OPTION
             result = []
             IO.foreach(filename) {|line| result.push(line.match(/#{$PATTERN}/)) }
+            puts result
             return result
         end
         return result
@@ -129,21 +137,16 @@ def rgrep()
         result = []
         IO.foreach(filename) {|line| result.push(line[..-2]) if line.split().include? $PATTERN }
         if $C_OPTION
+            puts result.length()
             return result.length()
         end
         if $M_OPTION
+            puts result.map{$PATTERN}
             return result.map{$PATTERN}
         end
+        puts result
         return result 
     end  
-
-
-
-    # need to check for missing pattern 
-    # need to check for invalid combination of options
-
-    # if provided just the file with no options rgrep.rb test.txt
-
 end
 
 puts(rgrep())
