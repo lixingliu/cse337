@@ -1,4 +1,4 @@
-def contains_virus(grid)
+def contain_virus(grid)
     row = grid.length() - 1
     col = grid[0].length() - 1  
     wall_count = 0
@@ -14,10 +14,12 @@ def contains_virus(grid)
     end
     return(wall_count)
 end
-puts("test 1")
-isInfected = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]] 
-result = contains_virus(isInfected)
-puts "Number of walls needed: #{result}"    #16
+
+
+# puts("test 1")
+# isInfected = [[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]] 
+# result = contain_virus(isInfected)
+# puts "Number of walls needed: #{result}"    #16
 
 # puts("test 2")
 # isInfected = [[0,1,0,0],[1,1,1,0],[0,1,0,0],[1,1,0,0]] 

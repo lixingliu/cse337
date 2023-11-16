@@ -149,4 +149,4 @@ def rgrep()
     end  
 end
 
-puts(rgrep())
+rgrep()
