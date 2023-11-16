@@ -17,6 +17,15 @@ fi
 
 > "$OUTPUT_FILE"
 
-while IFS= read -r line; do
-echo "l"
-done < "$INPUT_FILE"
+awk -F'[,;:]' '{
+    for (i=1; i <=NF; i++) {
+        sum[i]+=$i
+    }
+}
+END {
+    for (i=1; i <=NF; i++) {
+        print "Col " i": " sum[i] "\n"
+    }
+}' "$INPUT_FILE" > "$OUTPUT_FILE"
+
+
