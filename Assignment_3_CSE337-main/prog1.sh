@@ -24,7 +24,7 @@ SOURCE_DIRECTORY="$1"
 DESTINATION_DIRECTORY="$2"
 
 find "$SOURCE_DIRECTORY" -type d -print0 | while read -d '' -r DIRECTORY || [[  -n $DIRECTORY  ]]; do
-    FILE_COUNT=$(find $DIRECTORY -name '*.c' | wc -l)
+    FILE_COUNT=$(find $DIRECTORY -maxdepth 1 -name '*.c' | wc -l)
     if [ $FILE_COUNT -gt 3 ]; then
         find $DIRECTORY -maxdepth 1 -name '*.c' -print0 | while read -d '' -r FILE || [[ -n $FILE ]]; do
             FILE_DIRECTORY=$(dirname $FILE)
@@ -32,21 +32,22 @@ find "$SOURCE_DIRECTORY" -type d -print0 | while read -d '' -r DIRECTORY || [[  
             RELATIVE_PATH=$(realpath --relative-to="$SOURCE_DIRECTORY" "$FILE_DIRECTORY")
             NEW_PATH="$DESTINATION_DIRECTORY/$RELATIVE_PATH"
 
-            if [ ! -e "$NEW_PATH" ]; then
-                mkdir -p "$NEW_PATH"
-            fi
+
 
             echo -e "DO YOU WANT $FILE TO $NEW_PATH ? (y/n)"
             read -r RESPONSE </dev/tty
 
             if [ "$RESPONSE" == "y" ] || [ "$RESPONSE" == 'Y' ]; then
+                if [ ! -e "$NEW_PATH" ]; then
+                  mkdir -p "$NEW_PATH"
+                fi
                 mv "$FILE" "$NEW_PATH"
                 else
                     echo "SKIPPING $FILE"
             fi
         done
     else
-        find $DIRECTORY -name '*.c' -print0 | while read -d '' -r FILE || [[ -n $FILE ]]; do
+        find $DIRECTORY -maxdepth 1 -name '*.c' -print0 | while read -d '' -r FILE || [[ -n $FILE ]]; do
             FILE_DIRECTORY=$(dirname $FILE)
             FILE_NAME=$(basename $FILE)
             RELATIVE_PATH=$(realpath --relative-to="$SOURCE_DIRECTORY" "$FILE_DIRECTORY")
