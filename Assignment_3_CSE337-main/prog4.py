@@ -8,7 +8,8 @@ def update_label(event = None):
     text = entry.get()  # Get the current text in the Entry
     selected_date = cal.get_date()  # Get the selected date from the Calendar
     selected_option = combobox.get()  # Get the current selection from the Combo Box
-    task = text + " - Priority: " + selected_option + " - Due Date: " + selected_date
+    description_text = description.get()
+    task = text + " - Priority: " + selected_option + " - Due Date: " + selected_date + " - Description: " + description_text
     label.config(text=task)  # Update the Label with the current text
 
 def on_calendar_change(event):
@@ -26,8 +27,13 @@ def on_add_task(event = None):
         return
     active_list_box.insert(tk.END, task)
     entry.delete(0, tk.END)
+    description.delete(0, tk.END)
     task = ""
     label.config(text=task)  # Update the Label with the current text
+    description_label.config(text=task)
+    selected_option.set("High")
+
+
 
 def on_complete_task(event = None):
     selected_indicies = active_list_box.curselection()
@@ -50,7 +56,8 @@ def on_remove_task(event = None):
 def on_edit_task(event = None):
     global task
     global cal
-    cal.destroy()  # Destroy the existing calendar widget
+    global options
+    cal.selection_clear()
     window.update()
     selected_indicies = active_list_box.curselection()
     if selected_indicies:
@@ -58,17 +65,18 @@ def on_edit_task(event = None):
         selected_task = active_list_box.get(index)
         task_name = selected_task.split(" - Priority: ")[0]  # Extract task name
         priority_info = selected_task.split(" - Priority: ")[1]  # Extract priority and date information
+        description_name = selected_task.split(" - Description: ")[1]  # Split by the description part
 
+        print(selected_task)
         priority = priority_info.split(" - Due Date: ")[0]  # Extract priority
         due_date = priority_info.split(" - Due Date: ")[1]  # Extract due date
-        month, day, year = map(int, due_date.split('/'))
-        cal = Calendar(window, selectmode="day", year=year, month=month, day=day)
-        cal.place(x=10, y=10)  # Place the calendar at the top left
-        cal.bind("<<CalendarSelected>>", on_calendar_change)
+        cal.selection_set(due_date)
+        selected_option.set(priority)
+
         entry.insert(0, task_name)
         label.config(text=selected_task)  # Update the Label with the current text
-        print(selected_task)
-
+        description.insert(0, description_name)
+        active_list_box.delete(index)
 
 window = tk.Tk()
 window.title("To-Do List App")
@@ -97,6 +105,12 @@ task_name_frame = tk.Frame(window)
 entry = tk.Entry(add_task_frame, width=30)
 entry.bind("<KeyRelease>", update_label)  
 entry.pack(side=tk.LEFT)  
+
+description_label = tk.Label(add_task_frame, text="Description")
+description_label.pack(side=tk.LEFT, padx=5) 
+description = tk.Entry(add_task_frame, width=30)
+description.bind("<KeyRelease>", update_label)
+description.pack(side=tk.LEFT)
 
 full_task_name_label = tk.Label(task_name_frame, text="Task: ")
 full_task_name_label.pack(side=tk.LEFT)
