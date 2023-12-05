@@ -238,5 +238,158 @@ class TestPhysicalInfoClass(unittest.TestCase):
         instance.set_height(84)
         self.assertTrue(instance.height <= 84)
 
+    def test_temp_is_float(self):
+        instance = impl.PhysicalInfo()
+        instance.set_temperature(95.1)
+        self.assertEqual(instance.temperature, 95.1)
+        self.assertIsInstance(instance.temperature, float)
+
+    def test_temp_is_boolean(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_temperature(True)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a temp thats a boolean")
+
+    def test_temp_is_int(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_temperature(97)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a temp thats a int")
+
+    def test_temp_is_str(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_temperature("100")
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a temp thats a str")
+
+    def test_temp_is_105(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_temperature(105.0)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a temp thats out of range")
+
+    def test_temp_is_94(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_temperature(94.0)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a temp thats out of range")
+
+    def test_temp_is_104(self):
+        instance = impl.PhysicalInfo()
+        instance.set_temperature(104.0)
+        self.assertEqual(instance.temperature, 104.0)
+        self.assertIsInstance(instance.temperature, float)
+
+    def test_temp_is_95(self):
+        instance = impl.PhysicalInfo()
+        instance.set_temperature(95.0)
+        self.assertEqual(instance.temperature, 95.0)
+        self.assertIsInstance(instance.temperature, float)
+
+    def test_date_is_string(self):
+        instance = impl.PhysicalInfo()
+        instance.set_date("07-21-2002")
+        self.assertEqual(instance.date, "07-21-2002")
+
+    def test_date_is_boolean(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_date(True)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a date thats a boolean")
+            
+    def test_date_is_int(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_date(123)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a date thats a int")
+        
+    def test_date_is_float(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_date(2.5)
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a date thats a boolean")
+        
+    def test_date_is_list(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_date([1,2,3])
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a date thats a list")
+        
+    def test_date_year_1899(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_date("07-21-1899")
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else: 
+            self.fail("Expected ValueError when setting a date thats out of range 1900 and 2100 inclusive")
+
+    def test_date_year_1900(self):
+        instance = impl.PhysicalInfo()
+        instance.set_date("07-21-1900")
+        self.assertEqual(instance.date, "07-21-1900")
+
+    def test_date_year_1901(self):
+        instance = impl.PhysicalInfo()
+        instance.set_date("07-21-1901")
+        self.assertEqual(instance.date, "07-21-1901")
+
+    def test_date_year_2099(self):
+        instance = impl.PhysicalInfo()
+        instance.set_date("07-21-2099")
+        self.assertEqual(instance.date, "07-21-2099")
+
+    def test_date_year_2100(self):
+        instance = impl.PhysicalInfo()
+        instance.set_date("07-21-2100")
+        self.assertEqual(instance.date, "07-21-2100")
+
+
+    def test_date_year_2101(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_date("07-21-2101")
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else: 
+            self.fail("Expected ValueError when setting a date thats out of range 1900 and 2100 inclusive")
+
+    def test_date_format(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_date("07/21/2002")
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a date thats not proper format")
+            
 if __name__ == '__main__':
 	unittest.main(verbosity=2)
+
