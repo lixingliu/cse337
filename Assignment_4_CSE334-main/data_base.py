@@ -9,7 +9,6 @@ Using Pandas, this script combines data from the:
 to calculate final grades for a class.
 """
 #Importing Libraries and Setting Paths
-import os
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -32,44 +31,37 @@ quiz1 = pd.read_csv(DATA_FOLDER / "quiz_1_grades.csv", index_col="Email")
 quiz1.rename(columns={
     'Grade':'quiz_1_grades'
 }, inplace=True)
-print(quiz1)
-quiz_grades = quiz_grades.merge(quiz1, on='Email', how='outer')
+
 quiz2 = pd.read_csv(DATA_FOLDER / "quiz_2_grades.csv", index_col="Email")
 quiz2.rename(columns={
     'Grade':'quiz_2_grades'
 }, inplace=True)
-# print(quiz2)
-quiz_grades = quiz_grades.merge(quiz2, on='Email', how='outer')
-
-
-
-
-
 
 quiz3 = pd.read_csv(DATA_FOLDER / "quiz_3_grades.csv", index_col="Email")
 quiz3.rename(columns={
     'Grade':'quiz_3_grades'
 }, inplace=True)
-# print(quiz3)
+
 quiz4 = pd.read_csv(DATA_FOLDER / "quiz_4_grades.csv", index_col="Email")
 quiz4.rename(columns={
     'Grade':'quiz_4_grades'
 }, inplace=True)
-# print(quiz4)
+
 quiz5 = pd.read_csv(DATA_FOLDER / "quiz_5_grades.csv", index_col="Email")
 quiz5.rename(columns={
     'Grade':'quiz_+5_grades'
 }, inplace=True)
-# print(quiz5)
-# print(quiz_grades)
 
+quiz_grades = pd.concat([quiz1, quiz2, quiz3, quiz4, quiz5], axis=1)
+quiz_grades = quiz_grades.T.drop_duplicates().T
 
 #Data Merging: roaster and homework
 final_data = pd.merge(roster, hw_exam_grades, left_on='NetID', right_on='SID', how='left')
-# print(final_data)
-
-# #Data Merging: Final data and quiz grades
-# final_data = 
+print(final_data)
+print(quiz_grades)
+#Data Merging: Final data and quiz grades
+final_data = pd.merge(final_data, quiz_grades, left_on='Email Address', right_on="Email", how='left')
+print(final_data)
 
 # final_data = final_data.fillna(0)
 
