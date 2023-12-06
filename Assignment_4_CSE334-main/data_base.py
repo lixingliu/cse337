@@ -20,12 +20,10 @@ DATA_FOLDER = HERE / "data"
 
 #Data Importation and Cleaning
 roster = pd.read_csv(DATA_FOLDER / "roster.csv")
-# print(roster)
 
 hw_exam_grades = pd.read_csv(DATA_FOLDER / "hw_exam_grades.csv")
-# print(hw_exam_grades)
-
 quiz_grades = pd.DataFrame()
+
 #Your code here to read the quiz_grades
 quiz1 = pd.read_csv(DATA_FOLDER / "quiz_1_grades.csv", index_col="Email")
 quiz1.rename(columns={
@@ -49,29 +47,37 @@ quiz4.rename(columns={
 
 quiz5 = pd.read_csv(DATA_FOLDER / "quiz_5_grades.csv", index_col="Email")
 quiz5.rename(columns={
-    'Grade':'quiz_+5_grades'
+    'Grade':'quiz_5_grades'
 }, inplace=True)
 
 quiz_grades = pd.concat([quiz1, quiz2, quiz3, quiz4, quiz5], axis=1)
 quiz_grades = quiz_grades.T.drop_duplicates().T
 
 #Data Merging: roaster and homework
-final_data = pd.merge(roster, hw_exam_grades, left_on='NetID', right_on='SID', how='left')
-print(final_data)
-print(quiz_grades)
+roster["NetID"] = roster["NetID"].str.lower()
+final_data = pd.merge(roster, hw_exam_grades, left_on='NetID', right_on='SID', how='outer')
+final_data["Email Address"] = final_data["Email Address"].str.lower()
+
 #Data Merging: Final data and quiz grades
-final_data = pd.merge(final_data, quiz_grades, left_on='Email Address', right_on="Email", how='left')
-print(final_data)
+final_data = pd.merge(final_data, quiz_grades, left_on="Email Address", right_index=True, how='outer')
+final_data = final_data.fillna(0)
 
-# final_data = final_data.fillna(0)
+#Data Processing and Score Calculation
+n_exams = 3
+#For each exam, calculate the score as a proportion of the maximum points possible.
+#Remove pass once you have cerated written the for loop
+final_data.set_index("NetID", inplace=True)
 
-# #Data Processing and Score Calculation
-# n_exams = 3
-# #For each exam, calculate the score as a proportion of the maximum points possible.
-# #Remove pass once you have cerated written the for loop
-# for n in range(1, n_exams + 1):
-#     #Your Code here
-#     pass
+final_data.to_csv("final_data.csv", index=False)
+for n in range(1, n_exams + 1):
+#Your Code here
+    exam_column = "Exam " + str(n)
+    exam_max_pts_column = exam_column + " - Max Points"
+    result = final_data[exam_column] / final_data[exam_max_pts_column]
+    final_data[f"Exam {n} Score"] = result
+    # print(result)
+print(final_data.head())
+final_data.to_csv("final_data.csv", index=False)
 
 # #Calculating Exam Scores:
 # #Filter homework and Homework - for max points
