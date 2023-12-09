@@ -20,8 +20,11 @@ DATA_FOLDER = HERE / "data"
 
 #Data Importation and Cleaning
 roster = pd.read_csv(DATA_FOLDER / "roster.csv")
-
 hw_exam_grades = pd.read_csv(DATA_FOLDER / "hw_exam_grades.csv")
+hw_exam_grades_submission_cols = hw_exam_grades.filter(regex="Submission")
+hw_exam_grades.drop(columns=hw_exam_grades_submission_cols, axis=1)
+
+
 quiz_grades = pd.DataFrame()
 
 #Your code here to read the quiz_grades
@@ -109,6 +112,7 @@ quiz_max_points = pd.Series(
 
 #Final Quiz Score Calculation:
 sum_of_quiz_scores = quiz_scores.sum(axis=1)
+
 sum_of_quiz_max = quiz_max_points.sum()
 final_data["Total Quizzes"] = sum_of_quiz_scores / sum_of_quiz_max
 print("Total Quizzes score")
@@ -138,7 +142,8 @@ weightings = pd.Series(
 )
 final_score = (final_data * weightings).sum(axis=1)
 final_data["Final Score"] = final_score
-
+print(final_data)
+final_data.to_csv("final_data.csv", index=False)
 #Rounding Up the Final Score:
 final_data["Ceiling Score"] = (final_data["Final Score"]*100).apply(np.ceil).astype(float)
 print("Rounding Up Final score")

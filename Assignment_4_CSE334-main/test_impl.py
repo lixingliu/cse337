@@ -390,6 +390,14 @@ class TestPhysicalInfoClass(unittest.TestCase):
         else:
             self.fail("Expected ValueError when setting a date thats not proper format")
             
+    def test_data_format2(self):
+        instance = impl.PhysicalInfo()
+        try:
+            instance.set_date("99-99-2000")
+        except ValueError as e:
+            self.assertIsInstance(e, ValueError)
+        else:
+            self.fail("Expected ValueError when setting a date thats not in range")
 if __name__ == '__main__':
 	unittest.main(verbosity=2)
 

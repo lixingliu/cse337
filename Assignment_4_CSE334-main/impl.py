@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 
 class PhysicalInfo:
@@ -8,11 +9,6 @@ class PhysicalInfo:
         self.gender = None
         self.height = None
         self.temperature = None
-
-    def set_date(self, date_str):
-        # Here you can add validation or parsing logic for date format if needed
-        self.date = date_str
-
 
     def set_name(self, name_str):
         if not isinstance(name_str, str):
@@ -58,5 +54,30 @@ class PhysicalInfo:
         self.height = height_int
 
     def set_temperature(self, temperature_float):
-        # You might want to validate temperature input here
+        if not isinstance(temperature_float, float):
+            raise ValueError("Temperature should be a float")
+
+        # Check if the temperature is within the specified range [95.0, 104.0]
+        if not (95.0 <= temperature_float <= 104.0):
+            raise ValueError("Temperature should be between 95.0 and 104.0 (inclusive)")
+
         self.temperature = temperature_float
+        
+    def set_date(self, date_str):
+        if not isinstance(date_str, str):
+            raise ValueError("Date should be a string")
+        # Validate date format (MM-DD-YYYY) and range (1900-2100)
+        try:
+            # Split the date string into components
+            month, day, year = map(int, date_str.split('-'))
+            date_obj = f"{month:02d}-{day:02d}-{year:04d}"
+            if not (1 <= month <= 12) or not (1 <= day <= 31):
+                raise ValueError("Month should be between 1-12 and day between 1-31")
+
+            # Check if the date is a valid date in the range
+            if not (1900 <= year <= 2100) or date_obj != date_str:
+                raise ValueError("Date should be in MM-DD-YYYY format between 1900 and 2100")
+        except (ValueError, IndexError):
+            raise ValueError("Invalid date format. Please use MM-DD-YYYY format")
+
+        self.date = date_str
